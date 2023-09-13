@@ -46,6 +46,12 @@ void av_init_packet(AVPacket *pkt)
     pkt->opaque               = NULL;
     pkt->opaque_ref           = NULL;
     pkt->time_base            = av_make_q(0, 1);
+
+    pkt->current_sap          = 0;
+    pkt->next_sap             = 0;
+    pkt->stream_id            = 0;
+    pkt->serial               = 0;
+    pkt->codec_id             = 0;
 }
 #endif
 
@@ -397,6 +403,12 @@ int av_packet_copy_props(AVPacket *dst, const AVPacket *src)
     dst->opaque_ref           = NULL;
     dst->side_data            = NULL;
     dst->side_data_elems      = 0;
+
+    dst->current_sap          = src->current_sap;
+    dst->next_sap             = src->next_sap;
+    dst->stream_id            = src->stream_id;
+    dst->serial               = src->serial;
+    dst->codec_id             = src->codec_id;
 
     ret = av_buffer_replace(&dst->opaque_ref, src->opaque_ref);
     if (ret < 0)

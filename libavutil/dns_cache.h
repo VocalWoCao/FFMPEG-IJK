@@ -1,5 +1,5 @@
 /*
- * Version functions.
+ * copyright (c) 2017 Raymond Zheng
  *
  * This file is part of FFmpeg.
  *
@@ -18,32 +18,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "config.h"
+#ifndef AVUTIL_DNS_CACHE_H
+#define AVUTIL_DNS_CACHE_H
 
-#include "libavutil/avassert.h"
-#include "avformat.h"
-#include "version.h"
+#include "libavutil/log.h"
 
-#include "libavutil/ffversion.h"
-const char av_format_ffversion[] = "FFmpeg version " FFMPEG_VERSION;
+typedef struct DnsCacheEntry {
+    volatile int ref_count;
+    volatile int delete_flag;
+    int64_t expired_time;
+    struct addrinfo *res;  // construct by private function, not support ai_next and ai_canonname, can only be released using free_private_addrinfo
+} DnsCacheEntry;
 
-#define FF_MAX_CODEC_WIDTH    32768
-#define FF_MAX_CODEC_HEIGHT   32768
-#define FF_MAX_CODEC_SAMPLERATE   96000
+DnsCacheEntry *get_dns_cache_reference(const char *uri);
+int release_dns_cache_reference(const char *uri, DnsCacheEntry **p_entry);
+int remove_dns_cache_entry(const char *uri);
+int add_dns_cache_entry(const char *uri, struct addrinfo *cur_ai, int64_t timeout);
+int remove_all_dns_cache_entry(void);
 
-unsigned avformat_version(void)
-{
-    av_assert0(LIBAVFORMAT_VERSION_MICRO >= 100);
-    return LIBAVFORMAT_VERSION_INT;
-}
 
-const char *avformat_configuration(void)
-{
-    return FFMPEG_CONFIGURATION;
-}
-
-const char *avformat_license(void)
-{
-#define LICENSE_PREFIX "libavformat license: "
-    return &LICENSE_PREFIX FFMPEG_LICENSE[sizeof(LICENSE_PREFIX) - 1];
-}
+#endif /* AVUTIL_DNS_CACHE_H */

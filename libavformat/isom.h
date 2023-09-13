@@ -258,6 +258,7 @@ typedef struct MOVStreamContext {
         AVEncryptionInfo *default_encrypted_sample;
         MOVEncryptionIndex *encryption_index;
     } cenc;
+    int last_pts;
 } MOVStreamContext;
 
 typedef struct MOVContext {
@@ -312,6 +313,10 @@ typedef struct MOVContext {
     uint8_t *decryption_key;
     int decryption_key_len;
     int enable_drefs;
+    int allow_multi_extradata;
+    int has_extradata;
+    int ignore_sidx_index;
+    int fix_fragment_seek;
     int32_t movie_display_matrix[3][3]; ///< display matrix from mvhd
     int have_read_mfra_size;
     uint32_t mfra_size;

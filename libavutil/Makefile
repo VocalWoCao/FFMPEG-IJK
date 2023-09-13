@@ -4,6 +4,7 @@ DESC = FFmpeg utility library
 HEADERS = adler32.h                                                     \
           aes.h                                                         \
           aes_ctr.h                                                     \
+          application.h                                                 \
           attributes.h                                                  \
           audio_fifo.h                                                  \
           avassert.h                                                    \
@@ -28,6 +29,7 @@ HEADERS = adler32.h                                                     \
           dovi_meta.h                                                   \
           downmix_info.h                                                \
           encryption_info.h                                             \
+          dns_cache.h                                                   \
           error.h                                                       \
           eval.h                                                        \
           fifo.h                                                        \
@@ -88,8 +90,14 @@ HEADERS = adler32.h                                                     \
           video_enc_params.h                                            \
           xtea.h                                                        \
           tea.h                                                         \
+          thread.h                                                      \
+          reverse.h                                                     \
           tx.h                                                          \
           film_grain_params.h                                           \
+
+ifeq ($(ARCH),x86)
+HEADERS += $(ARCH)/asm.h
+endif
 
 ARCH_HEADERS = bswap.h                                                  \
                intmath.h                                                \
@@ -102,6 +110,7 @@ BUILT_HEADERS = avconfig.h                                              \
 OBJS = adler32.o                                                        \
        aes.o                                                            \
        aes_ctr.o                                                        \
+       application.o                                                    \
        audio_fifo.o                                                     \
        avstring.o                                                       \
        avsscanf.o                                                       \
@@ -123,6 +132,7 @@ OBJS = adler32.o                                                        \
        dovi_meta.o                                                      \
        downmix_info.o                                                   \
        encryption_info.o                                                \
+       dns_cache.o                                                      \
        error.o                                                          \
        eval.o                                                           \
        fifo.o                                                           \
