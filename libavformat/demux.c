@@ -3487,8 +3487,10 @@ int av_try_find_stream_info(AVFormatContext *ic, AVDictionary **options) {
     for (int i = 0; i < ic->nb_streams; i++) {
         AVStream * st = ic->streams[i];
         st->discard = AVDISCARD_DEFAULT;
-        avcodec_copy_context(st->codec,     avctx[i]);
-        avcodec_copy_context(st->internal->avctx, avctx[i]);
+        // avcodec_copy_context(st->codec,     avctx[i]);
+        // avcodec_copy_context(st->internal->avctx, avctx[i]);
+        avcodec_parameters_to_context(st->codec, avctx[i]);
+        avcodec_parameters_to_context(st->internal->avctx, avctx[i]);
         avcodec_parameters_from_context(st->codecpar, avctx[i]);
         avpriv_set_pts_info(st, st->pts_wrap_bits, st->time_base.num, st->time_base.den);
     }
