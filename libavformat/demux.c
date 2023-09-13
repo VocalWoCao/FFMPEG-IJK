@@ -1467,9 +1467,8 @@ retry:
         *ts = av_rescale_q(pkt->dts, s->streams[pkt->stream_index]->time_base, AV_TIME_BASE_Q);
     }
 
-    ret = ff_packet_list_put(&s->internal->packet_buffer,
-                             &s->internal->packet_buffer_end,
-                             pkt, FF_PACKETLIST_FLAG_REF_PACKET);
+    ret = avpriv_packet_list_put(&s->internal->packet_buffer,
+                                         pkt, NULL, 0);
     (*nb_packets)++;
     av_packet_unref(pkt);
     if (ret < 0)
@@ -2460,6 +2459,7 @@ int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
     int count = 0, ret = 0;
     int64_t read_size;
     AVPacket *pkt1 = si->pkt;
+    AVPacket *pkt;
     int64_t old_offset  = avio_tell(ic->pb);
     // new streams might appear, no options for those
     int orig_nb_streams = ic->nb_streams;
@@ -2492,7 +2492,7 @@ int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
                     eof_reached = 1;
                     break;
                 }
-                pkt = &pkt1;
+                pkt = pkt1;
 
                 if (!(ic->streams[pkt->stream_index]->disposition & AV_DISPOSITION_ATTACHED_PIC))
                     read_size += pkt->size;
