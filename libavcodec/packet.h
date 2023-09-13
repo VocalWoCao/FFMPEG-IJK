@@ -31,6 +31,7 @@
 #include "libavutil/version.h"
 
 #include "libavcodec/version_major.h"
+#include "codec_id.h"
 
 /**
  * @defgroup lavc_packet AVPacket
