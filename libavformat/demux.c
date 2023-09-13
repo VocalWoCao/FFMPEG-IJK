@@ -46,6 +46,10 @@
 #include "internal.h"
 #include "url.h"
 
+#define FF_MAX_CODEC_WIDTH    32768
+#define FF_MAX_CODEC_HEIGHT   32768
+#define FF_MAX_CODEC_SAMPLERATE   96000
+
 static int64_t wrap_timestamp(const AVStream *st, int64_t timestamp)
 {
     const FFStream *const sti = cffstream(st);
