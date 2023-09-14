@@ -3385,7 +3385,6 @@ AVCodecContext * create_audio_decoder_from_codecpar (AVCodecParameters * codecpa
 // must be called after avformat_open_input
 int av_try_find_stream_info(AVFormatContext *ic, AVDictionary **options) {
     FF_DISABLE_DEPRECATION_WARNINGS
-    const FFStream *const sti = cffstream(st);
     int ret = 0;
     int nb_packets = 0;
     AVCodecContext * avctx[IJK_PROBE_MAX_CTX_COUNT] = {0};
@@ -3490,6 +3489,7 @@ int av_try_find_stream_info(AVFormatContext *ic, AVDictionary **options) {
 
     for (int i = 0; i < ic->nb_streams; i++) {
         AVStream * st = ic->streams[i];
+        const FFStream *const sti = cffstream(st);
         st->discard = AVDISCARD_DEFAULT;
         avcodec_parameters_to_context(st->codecpar, avctx[i]);
         avcodec_parameters_to_context(sti->avctx, avctx[i]);
