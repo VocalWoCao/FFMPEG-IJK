@@ -33,7 +33,9 @@ HEADERS = ac3_parser.h                                                  \
           hevc_sei.h                                                    \
           hevc.h                                                        \
           hevc_ps.h                                                     \
-          hevc_parse.h
+          hevc_parse.h                                                  \
+          packet_internal.h                                             \
+          
 
 ifeq ($(ARCH),arm)
 HEADERS += $(ARCH)/mathops.h
