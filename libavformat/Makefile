@@ -11,6 +11,7 @@ HEADERS = avformat.h                                                    \
           id3v2.h                                                       \
           flv.h                                                         \
           avio_internal.h                                               \
+          packet_internal.h                                             \
 
 OBJS = allformats.o         \
        avformat.o           \
