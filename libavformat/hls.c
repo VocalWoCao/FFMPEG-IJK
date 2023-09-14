@@ -2356,10 +2356,10 @@ static int hls_read_packet(AVFormatContext *s, AVPacket *pkt)
                         fill_timing_for_id3_timestamped_stream(pls);
                     }
 
-                    if (pls->pkt.pts != AV_NOPTS_VALUE)
-                        pkt_ts =  pls->pkt.pts;
-                    else if (pls->pkt.dts != AV_NOPTS_VALUE)
-                        pkt_ts =  pls->pkt.dts;
+                    if (pls->pkt->pts != AV_NOPTS_VALUE)
+                        pkt_ts =  pls->pkt->pts;
+                    else if (pls->pkt->dts != AV_NOPTS_VALUE)
+                        pkt_ts =  pls->pkt->dts;
                     else
                         pkt_ts = AV_NOPTS_VALUE;
 

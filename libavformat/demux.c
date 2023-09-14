@@ -50,6 +50,8 @@
 #define FF_MAX_CODEC_HEIGHT   32768
 #define FF_MAX_CODEC_SAMPLERATE   96000
 
+static int read_frame_internal(AVFormatContext *s, AVPacket *pkt);
+
 static int64_t wrap_timestamp(const AVStream *st, int64_t timestamp)
 {
     const FFStream *const sti = cffstream(st);
@@ -1456,6 +1458,7 @@ int av_try_read_frame(AVFormatContext *s, int * nb_packets, int64_t * ts, int bl
     int ret = 0;
     AVPacket pkt1;
     AVPacket *pkt = &pkt1;
+    FFFormatContext *const si = ffformatcontext(s);
 
 retry:
     ret = read_frame_internal(s, pkt);
@@ -1471,7 +1474,7 @@ retry:
         *ts = av_rescale_q(pkt->dts, s->streams[pkt->stream_index]->time_base, AV_TIME_BASE_Q);
     }
 
-    ret = avpriv_packet_list_put(&s->internal->packet_buffer,
+    ret = avpriv_packet_list_put(&si->packet_buffer,
                                          pkt, NULL, 0);
     (*nb_packets)++;
     av_packet_unref(pkt);
@@ -2460,7 +2463,7 @@ static int add_coded_side_data(AVStream *st, AVCodecContext *avctx)
 int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
 {
     FFFormatContext *const si = ffformatcontext(ic);
-    int count = 0, ret = 0;
+    int count = 0, ret = 0, i = 0;
     int64_t read_size;
     AVPacket *pkt1 = si->pkt;
     AVPacket *pkt;
@@ -2500,9 +2503,9 @@ int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
 
                 if (!(ic->streams[pkt->stream_index]->disposition & AV_DISPOSITION_ATTACHED_PIC))
                     read_size += pkt->size;
-
+ 
                 if (!(ic->flags & AVFMT_FLAG_NOBUFFER)) {
-                    ret = avpriv_packet_list_put(&ic->internal->raw_packet_buffer,
+                    ret = avpriv_packet_list_put(&si->raw_packet_buffer,
                                          pkt,NULL, 0);
                     if (ret < 0)
                         return ret;
@@ -3382,6 +3385,7 @@ AVCodecContext * create_audio_decoder_from_codecpar (AVCodecParameters * codecpa
 // must be called after avformat_open_input
 int av_try_find_stream_info(AVFormatContext *ic, AVDictionary **options) {
     FF_DISABLE_DEPRECATION_WARNINGS
+    const FFStream *const sti = cffstream(st);
     int ret = 0;
     int nb_packets = 0;
     AVCodecContext * avctx[IJK_PROBE_MAX_CTX_COUNT] = {0};
@@ -3487,10 +3491,8 @@ int av_try_find_stream_info(AVFormatContext *ic, AVDictionary **options) {
     for (int i = 0; i < ic->nb_streams; i++) {
         AVStream * st = ic->streams[i];
         st->discard = AVDISCARD_DEFAULT;
-        // avcodec_copy_context(st->codec,     avctx[i]);
-        // avcodec_copy_context(st->internal->avctx, avctx[i]);
-        avcodec_parameters_to_context(st->codec, avctx[i]);
-        avcodec_parameters_to_context(st->internal->avctx, avctx[i]);
+        avcodec_parameters_to_context(st->codecpar, avctx[i]);
+        avcodec_parameters_to_context(sti->avctx, avctx[i]);
         avcodec_parameters_from_context(st->codecpar, avctx[i]);
         avpriv_set_pts_info(st, st->pts_wrap_bits, st->time_base.num, st->time_base.den);
     }

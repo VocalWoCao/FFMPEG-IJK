@@ -9154,7 +9154,7 @@ static int mov_read_seek(AVFormatContext *s, int stream_index, int64_t sample_ti
         }
     }
     MOVStreamContext *sc = st->priv_data;
-    st->seek_result = st->index_entries[sc->current_sample].timestamp + sc->time_offset;;
+    st->seek_result = sti->index_entries[sc->current_sample].timestamp + sc->time_offset;;
     return 0;
 }
 

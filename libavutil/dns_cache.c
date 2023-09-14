@@ -22,6 +22,8 @@
 #include "libavutil/time.h"
 #include "libavformat/network.h"
 #include "libavutil/thread.h"
+#include "libavutil/mem.h"
+
 
 typedef struct DnsCacheContext DnsCacheContext;
 typedef struct DnsCacheContext {

@@ -22,6 +22,7 @@
 #define AVUTIL_DNS_CACHE_H
 
 #include "libavutil/log.h"
+#include "libavutil/common.h"
 
 typedef struct DnsCacheEntry {
     volatile int ref_count;

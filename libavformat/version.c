@@ -27,10 +27,6 @@
 #include "libavutil/ffversion.h"
 const char av_format_ffversion[] = "FFmpeg version " FFMPEG_VERSION;
 
-#define FF_MAX_CODEC_WIDTH    32768
-#define FF_MAX_CODEC_HEIGHT   32768
-#define FF_MAX_CODEC_SAMPLERATE   96000
-
 unsigned avformat_version(void)
 {
     av_assert0(LIBAVFORMAT_VERSION_MICRO >= 100);

@@ -25,6 +25,7 @@
 #include "libavutil/time.h"
 #include "libavutil/application.h"
 #include "libavutil/dns_cache.h"
+#include "libavutil/avstring.h"
 
 #include "internal.h"
 #include "network.h"
@@ -537,6 +538,7 @@ static int tcp_open(URLContext *h, const char *uri, int flags)
         cur_ai = cur_v4_ai;
     }
 
+restart:
 #if HAVE_STRUCT_SOCKADDR_IN6
     // workaround for IOS9 getaddrinfo in IPv6 only network use hardcode IPv4 address can not resolve port number.
     if (cur_ai->ai_family == AF_INET6){
@@ -632,6 +634,15 @@ static int tcp_open(URLContext *h, const char *uri, int flags)
     }
     return 0;
 
+ fail:
+    if (cur_ai->ai_next) {
+        /* Retry with the next sockaddr */
+        cur_ai = cur_ai->ai_next;
+        if (fd >= 0)
+            closesocket(fd);
+        ret = 0;
+        goto restart;
+    }
  fail1:
     if (fd >= 0)
         closesocket(fd);
@@ -740,9 +751,7 @@ static int tcp_fast_open(URLContext *h, const char *http_request, const char *ur
         }
     }
 #endif
-    fd = ff_socket(cur_ai->ai_family,
-                   cur_ai->ai_socktype,
-                   cur_ai->ai_protocol);
+    fd = ff_socket(cur_ai->ai_family, cur_ai->ai_socktype, cur_ai->ai_protocol, h);
     if (fd < 0) {
         ret = ff_neterrno();
         goto fail;
@@ -757,7 +766,7 @@ static int tcp_fast_open(URLContext *h, const char *http_request, const char *ur
     }
     if (s->listen == 2) {
         // multi-client
-        if ((ret = ff_listen(fd, cur_ai->ai_addr, cur_ai->ai_addrlen)) < 0)
+        if ((ret = ff_listen(fd, cur_ai->ai_addr, cur_ai->ai_addrlen, h)) < 0)
             goto fail1;
     } else if (s->listen == 1) {
         // single client
