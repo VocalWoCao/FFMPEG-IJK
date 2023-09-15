@@ -101,5 +101,6 @@ IJK_DUMMY_DEMUXER(ijkdash);
 IJK_DUMMY_DEMUXER(ijklivedash);
 IJK_DUMMY_DEMUXER(ijkioproxy);
 IJK_DUMMY_DEMUXER(ijkofflinehook);
+IJK_DUMMY_DEMUXER(ijklas);
 
 
