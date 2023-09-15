@@ -3116,7 +3116,7 @@ extern int ff_hevc_decode_extradata(const uint8_t *data, int size, HEVCParamSets
                                     HEVCSEI *sei, int *is_nalff, int *nal_length_size,
                                     int err_recognition, int apply_defdispwin, void *logctx);
 extern int avpriv_mpeg4audio_get_config2(MPEG4AudioConfig *c, const uint8_t *buf,
-                                        int bit_size, int sync_extension);
+                                  int size, int sync_extension, void *logctx);
 
 extern int av_try_find_stream_info(AVFormatContext *ic, AVDictionary **options);
 
@@ -3353,7 +3353,8 @@ AVCodecContext * create_audio_decoder_from_codecpar (AVCodecParameters * codecpa
     if ((ret = avpriv_mpeg4audio_get_config2(&m4ac,
                                             avctx->extradata,
                                             avctx->extradata_size,
-                                            1)) < 0) {
+                                            1,
+                                            avctx)) < 0) {
         avcodec_free_context(&avctx);
         return NULL;
     }
