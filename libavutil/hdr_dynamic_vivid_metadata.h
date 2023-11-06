@@ -126,42 +126,42 @@ typedef struct AVHDRVividColorToneMappingParams {
      * The mode of three Spline. the value shall be in the range
      * of 0 to 3, inclusive.
      */
-    int three_Spline_TH_mode;
+    int three_Spline_TH_mode[2];
 
     /**
      * three_Spline_TH_enable_MB is in the range of 0.0 to 1.0, inclusive
      * and in multiples of 1.0/255.
      *
      */
-    AVRational three_Spline_TH_enable_MB;
+    AVRational three_Spline_TH_enable_MB[2];
 
     /**
      * 3Spline_TH_enable of three Spline.
      * The value shall be in the range of 0.0 to 1.0, inclusive.
      * and in multiples of 1.0/4095.
      */
-    AVRational three_Spline_TH_enable;
+    AVRational three_Spline_TH_enable[2];
 
     /**
      * 3Spline_TH_Delta1 of three Spline.
      * The value shall be in the range of 0.0 to 0.25, inclusive,
      * and in multiples of 0.25/1023.
      */
-    AVRational three_Spline_TH_Delta1;
+    AVRational three_Spline_TH_Delta1[2];
 
     /**
      * 3Spline_TH_Delta2 of three Spline.
      * The value shall be in the range of 0.0 to 0.25, inclusive,
      * and in multiples of 0.25/1023.
      */
-    AVRational three_Spline_TH_Delta2;
+    AVRational three_Spline_TH_Delta2[2];
 
     /**
      * 3Spline_enable_Strength of three Spline.
      * The value shall be in the range of 0.0 to 1.0, inclusive,
      * and in multiples of 1.0/255.
      */
-    AVRational three_Spline_enable_Strength;
+    AVRational three_Spline_enable_Strength[2];
 } AVHDRVividColorToneMappingParams;
 
 

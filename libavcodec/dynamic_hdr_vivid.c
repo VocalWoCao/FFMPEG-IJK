@@ -102,16 +102,16 @@ int ff_parse_itu_t_t35_to_dynamic_hdr_vivid(AVDynamicHDRVivid *s, const uint8_t 
                                 return AVERROR_INVALIDDATA;
                             tm_params->three_Spline_num = get_bits(gb, 1) + 1;
                             for (int j = 0; j < tm_params->three_Spline_num; j++) {
-                                tm_params->three_Spline_TH_mode = get_bits(gb, 2);
-                                if (tm_params->three_Spline_TH_mode == 0 || tm_params->three_Spline_TH_mode == 2) {
+                                tm_params->three_Spline_TH_mode[j] = get_bits(gb, 2);
+                                if (tm_params->three_Spline_TH_mode[j] == 0 || tm_params->three_Spline_TH_mode[j] == 2) {
                                     if (get_bits_left(gb) < 8)
                                         return AVERROR_INVALIDDATA;
-                                    tm_params->three_Spline_TH_enable_MB = (AVRational){get_bits(gb, 8),  255};
+                                    tm_params->three_Spline_TH_enable_MB[j] = (AVRational){get_bits(gb, 8),  255};
                                 }
-                                tm_params->three_Spline_TH_enable = (AVRational){get_bits(gb, 12),  4095};
-                                tm_params->three_Spline_TH_Delta1 = (AVRational){get_bits(gb, 10),  1023};
-                                tm_params->three_Spline_TH_Delta2 = (AVRational){get_bits(gb, 10),  1023};
-                                tm_params->three_Spline_enable_Strength = (AVRational){get_bits(gb,  8),  255};
+                                tm_params->three_Spline_TH_enable[j] = (AVRational){get_bits(gb, 12),  4095};
+                                tm_params->three_Spline_TH_Delta1[j] = (AVRational){get_bits(gb, 10),  1023};
+                                tm_params->three_Spline_TH_Delta2[j] = (AVRational){get_bits(gb, 10),  1023};
+                                tm_params->three_Spline_enable_Strength[j] = (AVRational){get_bits(gb,  8),  255};
                             }
                         } else {
                             tm_params->three_Spline_num     = 1;
