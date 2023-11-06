@@ -115,9 +115,8 @@ int ff_parse_itu_t_t35_to_dynamic_hdr_vivid(AVDynamicHDRVivid *s, const uint8_t 
                             }
                         } else {
                             tm_params->three_Spline_num     = 1;
-                            tm_params->three_Spline_TH_mode = 0;
+                            tm_params->three_Spline_TH_mode[0] = 0;
                         }
-
                     }
                 }
             }
